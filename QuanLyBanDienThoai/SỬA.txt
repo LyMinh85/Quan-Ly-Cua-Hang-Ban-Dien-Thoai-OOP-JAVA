@@ -1,0 +1,14 @@
+KIỂM TRA LỖI  -> xong
+: TRÙNG MÃ ĐT -> xong
+
+ KTRA NHẬP GIÁ THÀNH -> xong
+
+CHỈNH SỬA ĐT -> xong
+
+KTRA MÃ NSX -> Xong
+
+HÀM LƯU FILE -> Xong
+
+TÌM KIẾM NSX -> Xong
+
+CHỈNH SỬA NSX -> Xong
