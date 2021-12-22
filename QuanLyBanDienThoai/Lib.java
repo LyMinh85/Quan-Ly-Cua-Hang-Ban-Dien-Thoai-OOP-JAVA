@@ -163,7 +163,7 @@ public class Lib implements Serializable{
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
             obj = ois.readObject();
         } catch (IOException | ClassNotFoundException | NullPointerException IOE){
-            printError("Load " + filename +  " thất bại");
+            printError("Load " + filename +  " thất bại => tạo dữ liệu mặc định");
             return null;
         }
         printMessage("Load " + filename +  " thành công");
@@ -235,26 +235,21 @@ public class Lib implements Serializable{
         return TEXT_BLUE + text + TEXT_RESET;
     }
 
+    public static String toGreenText(String text)
+    {
+        return TEXT_GREEN + text + TEXT_RESET;
+    }
+
     public static String nhapIDNhaCungCap(danhsachcungcap dsncc)
     {
         String idncc;
         do {
+            dsncc.xuatDS();
             idncc = Lib.takeStringInput("Nhập ID nhà cung cấp: ");
             if(dsncc.timKiemTheoID(idncc) == null)
-            {
                 printError("Không có nhà cung cấp này");
-                System.out.println("1. Xem danh sách nhà cung cấp và nhập lại");
-                System.out.println("2. Dừng lại");
-                switch (Lib.takeInputChoice(1, 2))
-                {
-                    case 1 -> {
-                        dsncc.xuat();
-                        continue;
-                    }
-                    case 2 -> {return "stop";}
-                }
-            }
-            return idncc;
+            else
+                return idncc;
         }while(true);
     }
 

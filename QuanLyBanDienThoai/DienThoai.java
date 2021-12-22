@@ -88,12 +88,10 @@ public abstract class DienThoai implements Serializable {
 	public void nhap(String maDienThoai, String maNSX, String maNhaCungCap) {
 		this.maDienThoai = maDienThoai;
 		this.tenDienThoai = Lib.takeStringInput("Nhập tên điện thoại: ");
-//		this.maNSX = Lib.takeStringInput("Nhập mã nhà sản xuất: ");
 		this.maNSX = maNSX;
 		this.color = Lib.takeStringInput("Nhập màu sắc điện thoại: ");
 		this.giathanh = Lib.takeIntegerInput("Nhập giá thành điện thoại: ");
 		this.theHe = Lib.takeStringInput("Nhập thế hệ điện thoại: ");
-//		this.maNhaCungCap = Lib.takeStringInput("Nhập mã nhà cung cấp: ");
 		this.maNhaCungCap = maNhaCungCap;
 	}
 
@@ -109,7 +107,7 @@ public abstract class DienThoai implements Serializable {
 	
 	public void xuatThongTin() {
 		System.out.format("|%18s|%18s|%18s|%18s|%18s|%18s|%18s|%n",maDienThoai,tenDienThoai,maNSX,color,giathanh,maNhaCungCap, heDieuHanh);
-        System.out.format("+%18s+%18s+%18s+%18s+%18s+%18s+%18s+%n","------------------","------------------","------------------","------------------","------------------","------------------", "------------------");
+        //System.out.format("+%18s+%18s+%18s+%18s+%18s+%18s+%18s+%n","------------------","------------------","------------------","------------------","------------------","------------------", "------------------");
     }
 	
 	public static void main(String[] args) {

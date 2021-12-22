@@ -11,7 +11,8 @@ public class NhanVienBanHang extends NhanVien implements Serializable {
 
     public void xuatThongTin()
     {
-        super.xuatThongTin();
+        System.out.printf("|%-16s|%-16s|%-16s|%-10s|%-10s|%-10s|%-9s|%-16s|", id, hoTen, diaChi, SDT, ngaySinh, gioiTinh, CMND, password);
+        System.out.printf("%-10s|", mucLuong);
         System.out.printf("%-16s|%n", "Bán hàng");
     }
 }

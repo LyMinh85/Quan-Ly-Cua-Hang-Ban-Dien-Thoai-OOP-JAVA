@@ -3,9 +3,14 @@ package QuanLyBanDienThoai;
 import java.io.Serializable;
 
 public class samsung extends DienThoai implements Serializable {
+	public samsung()
+	{
+		heDieuHanh = "ANDROID";
+	}
 
-	public samsung() {
-		heDieuHanh ="ANDROID";
+	public samsung(String maDienThoai, String tenDienThoai, String maNSX,String color, int giathanh,String theHe, String maNhaCungCap) {
+		super(maDienThoai, tenDienThoai, maNSX, color, giathanh, theHe, maNhaCungCap);
+		heDieuHanh = "ANDROID";
 	}
 	
 	

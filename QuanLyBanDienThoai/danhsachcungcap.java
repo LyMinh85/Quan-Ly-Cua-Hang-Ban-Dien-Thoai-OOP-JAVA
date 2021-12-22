@@ -7,151 +7,160 @@ package QuanLyBanDienThoai;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  *
  * @author User
  */
 public class danhsachcungcap implements Serializable {
-    private ArrayList<NhaCungCap> list = new ArrayList<>();
+    private ArrayList<NhaCungCap> listNhaCungCap = new ArrayList<>();
+    private int count = 0;
+
+    //Khởi tạo các nhà cung cấp mặc định
+    public danhsachcungcap()
+    {
+        listNhaCungCap.add(new NhaCungCap("Meow","TPHCM","9045495", "Meow@email", getMaNCC()));
+        listNhaCungCap.add(new NhaCungCap("Fish","Hà nội","549844", "Fish@email", getMaNCC()));
+    }
+
+    //Lấy mã nhà cung cấp tiếp theo
+    private String getMaNCC()
+    {
+        count++;
+        Integer a = count;
+        String str = a.toString();
+        while(str.length() != 3)
+            str = "0" + str;
+        str = "NCC" + str;
+        return str;
+    }
+
     // Nhập danh sách nhà cung cấp
     public void themncc(){
-        System.out.println("Nhập danh sách nhà cung cấp");
-        int n = Lib.takeSoLuongCanTao("Nhập số lượng nhà cung cấp: ");
-        for (int i = 0; i < n; i++) {
-                String tencc = Lib.takeStringInput("Tên nhà cung cấp:");        
-                String diachi = Lib.takeStringInput("Địa chỉ: ");
-                int sdt = Lib.takeIntegerInput("Số diện thoại liên lạc: ");
-                String email = Lib.takeStringInput("Email: ");
-                String macc = nhapIDNhaCungCap();
-        list.add(new NhaCungCap(tencc,diachi,sdt,email,macc));            
-        }
-      
-        
-       
-        
-}   
+        System.out.println(Lib.toBlueText("Nhập nhà cung cấp mới"));
+        String tencc = Lib.takeStringInput("Tên nhà cung cấp:");
+        String diachi = Lib.takeStringInput("Địa chỉ: ");
+        String sdt = Lib.takeStringInput("Số diện thoại liên lạc: ");
+        String email = Lib.takeStringInput("Email: ");
+        String macc = getMaNCC();
+
+        listNhaCungCap.add(new NhaCungCap(tencc,diachi,sdt,email,macc));
+    }
+
+    public void xuatTieuDe()
+    {
+        System.out.printf("+%-20s+%-20s+%-20s+%-20s+%-20s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20));
+        System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s| \n","Mã nhà cung cấp","Tên nhà cung cấp","Địa chỉ","Số điện thoại","Email");
+        System.out.printf("+%-20s+%-20s+%-20s+%-20s+%-20s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20));
+    }
+
     //Xuất danh sách nhà cung cấp
-    public void xuat(){
-        System.out.println("Danh sánh nhà cung cấp");
-        for(NhaCungCap nhaCungCap : list){
-            System.out.printf("+%-20s+%-20s+%-20s+%-20s+%-20s \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20));
-            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s \n","Mã nhà cung cấp","Tên nhà cung cấp","Địa chỉ","Số điện thoại","Email");
-            System.out.printf("+%-20s+%-20s+%-20s+%-20s+%-20s \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20));
-            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s \n",nhaCungCap.getMacc(),nhaCungCap.getTencc(),nhaCungCap.getDiachi(),nhaCungCap.getSdt(),nhaCungCap.getEmail());
-           
-           
+    public void xuatDS(){
+        System.out.println(Lib.toBlueText("Danh sánh nhà cung cấp"));
+        xuatTieuDe();
+        for(NhaCungCap nhaCungCap : listNhaCungCap){
+            nhaCungCap.xuatThongTin();
         }
     }
+
     //Sửa thông tin nhà cung cấp
     public void suaNcc(){
-        String up = Lib.takeStringInput("Mã nhà cung cấp cần sửa: ");
-        for (NhaCungCap nhaCungCap : list){
-            if(nhaCungCap.getMacc().equals(up)){
-                String tencc = Lib.takeStringInput("Tên nhà cung cấp:");        
-                String diachi = Lib.takeStringInput("Địa chỉ: ");
-                int sdt = Lib.takeIntegerInput("Số diện thoại liên lạc: ");
-                String email = Lib.takeStringInput("Email: ");
-                String macc = nhapIDNhaCungCap();
-                
-               nhaCungCap.setTencc(tencc);
-               nhaCungCap.setDiachi(diachi);
-               nhaCungCap.setSdt(sdt);
-               nhaCungCap.setEmail(email);
-               nhaCungCap.setMacc(macc);
-            }
+        String id = Lib.takeStringInput("Mã nhà cung cấp cần sửa: ");
+        NhaCungCap nhaCungCap = timKiemTheoID(id);
+        if(nhaCungCap != null)
+        {
+            boolean out = false;
+            do {
+                xuatTieuDe();
+                nhaCungCap.xuatThongTin();
+                System.out.println(Lib.toBlueText("Sửa thông tin nhà cung cấp"));
+                System.out.println("1. Sửa tên nhà cung cấp");
+                System.out.println("2. Sửa địa chỉ");
+                System.out.println("3. Sửa số điện thoại");
+                System.out.println("4. Sửa email");
+                System.out.println("0. Thoát");
+                switch (Lib.takeInputChoice(0, 4))
+                {
+                    case 1 -> nhaCungCap.setTencc(Lib.takeStringInput("Nhập tên mới: "));
+                    case 2 -> nhaCungCap.setDiachi(Lib.takeStringInput("Nhập địa chỉ mới: "));
+                    case 3 -> nhaCungCap.setSdt(Lib.takeStringInput("Nhập điện thoại mới: "));
+                    case 4 -> nhaCungCap.setEmail(Lib.takeStringInput("Nhập email mới: "));
+                    case 0 -> out = true;
+                }
+                if(!out)
+                    Lib.clearScreen();
+            }while (!out);
         }
-
-            }
+    }
 
     public NhaCungCap timKiemTheoID(String id)
     {
-        for(NhaCungCap nhaCungCap : list)
+        for(NhaCungCap nhaCungCap : listNhaCungCap)
             if(nhaCungCap.getMacc().equals(id))
                 return nhaCungCap;
         return null;
     }
 
-    public String nhapIDNhaCungCap()
-    {
-        String idncc;
-        do {
-            idncc = Lib.takeStringInput("Nhập mã nhà cung cấp: ");
-            if(timKiemTheoID(idncc) != null)
-                Lib.printError("Mã này đã có vui lòng nhập mã khác");
-            else
-                return idncc;
-        }while (true);
-    }
-    
-    //Tìm nhà cung cấp
-    public void timNcc(){
-        String timkiem = Lib.takeStringInput("Mã nhà cung cấp cần tìm: ");
-        NhaCungCap find = null;
-        
-        for (NhaCungCap nhaCungCap : list){
-            if(nhaCungCap.getMacc().equals(timkiem)){
-                find = nhaCungCap;
-                System.out.printf("%-20s|%-20s|%-20s|%-20s|%-20s \n","Mã nhà cung cấp","Tên nhà cung cấp","Địa chỉ","Số điện thoại","Email");
-                System.out.printf("%-20s%-20s|%-20s|%-20s|%-20s \n",nhaCungCap.getMacc(),nhaCungCap.getTencc(),nhaCungCap.getDiachi(),nhaCungCap.getSdt(),nhaCungCap.getEmail());
-                break;
-            }else{
-                System.out.println("Nhà cung cấp không có trong danh sách ");
-            }
-        }
-    }
     //Xóa nhà cung cấp
     public void xoaNcc(){
-        String xoacc = Lib.takeStringInput("Tên nhà cung cấp cần xóa: ");
-        NhaCungCap find = null;
-        
-        for (NhaCungCap nhaCungCap : list){
-            if(nhaCungCap.getMacc().equals(xoacc)){
-                find = nhaCungCap;
-                break;
-            }
-        }
+        String id = Lib.takeStringInput("Tên nhà cung cấp cần xóa: ");
+        NhaCungCap find = timKiemTheoID(id);
+
         if(find != null){
-            list.remove(find);
-            System.out.println("Nhà cung cấp đã xóa khỏi danh sách ");
+            listNhaCungCap.remove(find);
+            Lib.printMessage("Nhà cung cấp đã xóa khỏi danh sách");
         }else{
-            System.out.println("Nhà cung cấp không có trong danh sách ");
+            Lib.printError("Nhà cung cấp không có trong danh sách");
         }
     }
+
+    public void timKiem()
+    {
+        String tuKhoa = Lib.takeStringInput("Nhập từ khóa cần tìm: ");
+        ArrayList<NhaCungCap> listFilter = new ArrayList<>();
+        for(NhaCungCap nhaCungCap : listNhaCungCap)
+        {
+            if(
+                    nhaCungCap.getMacc().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    nhaCungCap.getDiachi().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    nhaCungCap.getEmail().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    nhaCungCap.getTencc().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    nhaCungCap.getSdt().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT))
+            )
+            {
+                listFilter.add(nhaCungCap);
+            }
+        }
+
+        System.out.println(Lib.toBlueText("Kết quả tìm kiếm theo từ khóa: ")  + Lib.toGreenText(tuKhoa));
+        xuatTieuDe();
+        for(NhaCungCap nhaCungCap : listFilter)
+            nhaCungCap.xuatThongTin();
+        if(listFilter.isEmpty())
+            Lib.printError("Không tìm được từ khóa này trong danh sách");
+    }
+
     public void menuNhacc(){
         boolean out = false;
         do{
-        System.out.println("--------------------------------------------------------");    
-        System.out.println("MENU NHÀ CUNG CẤP");
-        System.out.println("1. Xuất danh sách nhà cung cấp");
-        System.out.println("2. Thêm nhà cung cấp mới");
-        System.out.println("3. Sửa thông tin nhà cung cấp");
-        System.out.println("4. Tìm thông tin nhà cung cấp");
-        System.out.println("5. Xóa nhà cung cấp");
-        System.out.println("6. Thoát menu");
-        System.out.print("Lựa chọn: ");
-        switch(Lib.takeInputChoice(1, 6)){
-            case 1:
-               xuat();
-                break;
-            case 2:
-                themncc();
-                break;
-            case 3:
-                 suaNcc();
-                break;
-            case 4:
-               timNcc();
-                break;
-            case 5:
-                 xoaNcc();
-                break;
-            case 6:
-                out = true;
-                break;
-            default:
-                System.out.println("Giá trị lựa chọn không đúng");
-        }
+            xuatDS();
+            System.out.println(Lib.toBlueText("MENU NHÀ CUNG CẤP"));
+            System.out.println("1. Thêm nhà cung cấp mới");
+            System.out.println("2. Sửa thông tin nhà cung cấp");
+            System.out.println("3. Xóa nhà cung cấp");
+            System.out.println("4. Tìm kiếm");
+            System.out.println("0. Thoát menu");
+            System.out.print("Lựa chọn: ");
+            switch (Lib.takeInputChoice(0, 4)) {
+                case 1 -> themncc();
+                case 2 -> suaNcc();
+                case 3 -> xoaNcc();
+                case 4 -> timKiem();
+                case 0 -> out = true;
+            }
+            if(!out)
+                Lib.clearScreen();
         }while(!out);
     }
 } 

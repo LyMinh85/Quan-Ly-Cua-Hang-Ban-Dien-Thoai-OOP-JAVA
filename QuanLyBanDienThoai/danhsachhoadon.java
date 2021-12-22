@@ -7,311 +7,249 @@ package QuanLyBanDienThoai;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.Locale;
 
 /**
  *
  * @author User
  */
 public class danhsachhoadon implements Serializable {
-    private ArrayList<HoaDon> hd = new ArrayList<>();
+    private ArrayList<HoaDon> hoaDonArrayList = new ArrayList<>();
+    private int count = 0;
 
-    private HoaDon timKiemHoaDonTheoID(String id)
+    private HoaDon timKiemHoaDonTheoID(String id, Nguoi nguoi)
     {
-        return hd.stream().filter(x -> x.getMahd().equals(id)).findAny().orElse(null);
+        if(nguoi instanceof NhanVienBanHang)
+            return hoaDonArrayList.stream().filter(x -> x.getMahd().equals(id)).findAny().orElse(null);
+        else
+            return hoaDonArrayList.stream().filter(x -> x.getMahd().equals(id) && x.getMakh().equals(nguoi.getId())).findAny().orElse(null);
     }
 
-    public String nhapMaHoaDon()
+    private String getMaHoaDon()
     {
-        do {
-            String mahd = Lib.takeStringInput("Mã hóa đơn: ");
-            if(timKiemHoaDonTheoID(mahd) != null)
-                Lib.printError("Mã này đã có");
-            else
-                return mahd;
-        }while (true);
+        count++;
+        Integer a = count;
+        String str = a.toString();
+        while(str.length() != 3)
+            str = "0" + str;
+        str = "HD" + str;
+        return str;
     }
-    
-public void nhapHD(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
-        
-        System.out.println("Nhập danh sách hóa đơn");            
-        int n = Lib.takeSoLuongCanTao("Nhập số lượng hóa đơn:");
-         for (int i = 0; i < n; i++) {
-             String mahd = nhapMaHoaDon();
-             String manv = nguoi.getId();
-             String makh = Lib.nhapIDKhachHang(shop, "KhachHang");
-             if(makh.equals("stop"))
-             {
-                 Lib.printMessage("Đã dừng");
-                 return;
-             }
+
+    public void themHDCuaKhachHang(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
+        System.out.println(Lib.toBlueText("Mua điện thoại"));
+        String mahd = getMaHoaDon();
+        String manv = "";
+        String makh = nguoi.getId();
 
         danhsachChitietHD ds = new danhsachChitietHD();
         ds.NhapCTHD(danhSachDT);
 
-        Date date = new Date();
-        String timexuat = String.format("%tc",date);
-        System.out.println(date); 
-        hd.add(new HoaDon(mahd, manv,makh,timexuat, ds.Tien(), ds, "Đang chờ xử lý"));
-    }
-               
-        
-             
-}   
-public void themHD(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
-        nhapHD(danhSachDT, nguoi, shop);
+        String timexuat = Lib.getDateNow();
+        hoaDonArrayList.add(new HoaDon(mahd, manv,makh,timexuat, ds.tinhTongTien(), ds, "Đang chờ xác nhận"));
     }
 
-    public void themHDCuaKhachHang(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
-        System.out.println("Nhập danh sách hóa đơn");
-        int n = Lib.takeSoLuongCanTao("Nhập số lượng hóa đơn:");
-        for (int i = 0; i < n; i++) {
-            String mahd = nhapMaHoaDon();
-            String manv = "";
-            String makh = nguoi.getId();
-
-            danhsachChitietHD ds = new danhsachChitietHD();
-            ds.NhapCTHD(danhSachDT);
-
-            Date date = new Date();
-            String timexuat = String.format("%tc",date);
-            System.out.println(date);
-            hd.add(new HoaDon(mahd, manv,makh,timexuat, ds.Tien(), ds, "Đang chờ xác nhận"));
-        }
-    }
-    public void suaHD(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
-        System.out.println("Sủa thông tin hóa đơn");
-        String xo = Lib.takeStringInput("Mã hóa đơn cần sửa: ");
-        for (HoaDon hoaDon : hd) {
-            if (hoaDon.getMakh().equals(xo)) {
-                System.out.println("Nhập danh sách hóa đơn");
-                Date date = new Date();
-                String timexuat = String.format("%tc",date);
-                System.out.println(date);
-                String manv = Lib.nhapIDNhanVien(shop, "NhanVienBanHang");
-                String makh;
-                if(nguoi instanceof KhachHang)
-                {
-                    makh = nguoi.getId();
-                }
-                else
-                {
-                    makh = Lib.nhapIDKhachHang(shop, "KhachHang");
-                    if(makh.equals("stop"))
-                    {
-                        Lib.printMessage("Đã dừng");
-                        return;
-                    }
-
-                }
-                hoaDon.setManv(manv);
-                hoaDon.setMakh(makh);
-                hoaDon.getTimexuat();
-            }                
-            }           
-        }
-    public void timHD(){
-         System.out.println("Tìm hóa đơn");
-        String timhd = Lib.takeStringInput("Mã hóa đơn cần tìm: ");
-        for (HoaDon hoaDon : hd) {
-            if(hoaDon.getMahd().equals(timhd)){
-                String tinhTrang;
-                if(hoaDon.getTinhTrang().equals("Đang chờ xác nhận"))
-                    tinhTrang = Lib.TEXT_BLUE + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                else if(hoaDon.getTinhTrang().equals("Đã xác nhận"))
-                    tinhTrang = Lib.TEXT_GREEN + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                else
-                    tinhTrang = Lib.TEXT_RED + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                System.out.println("Tình trạng hóa đơn: " + tinhTrang);
-                System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-                System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", "Mã hóa đơn" , "Mã nhân viên","Mã khách hàng","Thời gian","Tổng tiền");
-                System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20) , Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-                System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", hoaDon.getMahd() , hoaDon.getManv(),hoaDon.getMakh(),hoaDon.getTimexuat(),hoaDon.getTongtien());
-                hoaDon.getDsCTHD().XuatCTHD();
-                break;
-            }
-            else{
-            System.out.println("Hóa đơn không có trong danh sách");
-            
-        }
-
-       }
-    }
-
-    public void timHDCuaKhachHang(Nguoi nguoi){
-        System.out.println("Tìm hóa đơn");
-        String timhd = Lib.takeStringInput("Mã hóa đơn cần tìm: ");
-        for (HoaDon hoaDon : hd) {
-            if(hoaDon.getMakh().equals(nguoi.getId())){
-                if(hoaDon.getMahd().equals(timhd)){
-                    String tinhTrang;
-                    if(hoaDon.getTinhTrang().equals("Đang chờ xác nhận"))
-                        tinhTrang = Lib.TEXT_BLUE + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                    else if(hoaDon.getTinhTrang().equals("Đã xác nhận"))
-                        tinhTrang = Lib.TEXT_GREEN + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
+    public void suaHD(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop)
+    {
+        String id = Lib.takeStringInput("Mã hóa đơn cần sửa: ");
+        HoaDon hoaDon = timKiemHoaDonTheoID(id, nguoi);
+        boolean out = false;
+        do {
+            xuatChiTietHoaDon(hoaDon);
+            System.out.println(Lib.toBlueText("Sủa thông tin hóa đơn"));
+            System.out.println("1. Sửa số lượng trong chi tiết hoá đơn");
+            System.out.println("0. Thoát");
+            switch (Lib.takeInputChoice(0, 1))
+            {
+                case 1 -> {
+                    String iddt = Lib.takeStringInput("Nhập mã điện thoại cần sửa: ");
+                    ChiTietHoaDon chiTietHoaDon = hoaDon.getDsCTHD().timKiemTheoIDHoaDon(iddt);
+                    if(chiTietHoaDon == null)
+                        Lib.printError("Không có mã điện thoại này trong chi tiết hóa đơn");
                     else
-                        tinhTrang = Lib.TEXT_RED + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                    System.out.println("Tình trạng hóa đơn: " + tinhTrang);
-                    System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-                    System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", "Mã hóa đơn" , "Mã nhân viên","Mã khách hàng","Thời gian","Tổng tiền");
-                    System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20) , Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-                    System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", hoaDon.getMahd() , hoaDon.getManv(),hoaDon.getMakh(),hoaDon.getTimexuat(),hoaDon.getTongtien());
-                    hoaDon.getDsCTHD().XuatCTHD();
-                    break;
+                    {
+                        int num = Lib.takeIntegerInput("Nhập số lượng mới: ");
+                        chiTietHoaDon.setSluong(num);
+                        hoaDon.setTongtien(hoaDon.getDsCTHD().tinhTongTien());
+                    }
                 }
-                else{
-                    System.out.println("Hóa đơn không có trong danh sách");
+                case 0 -> out = true;
+            }
+            if(!out)
+                Lib.clearScreen();
+        }while(!out);
+    }
 
-                }
+    public void timHD(Nguoi nguoi)
+    {
+        System.out.println("Tìm hóa đơn");
+        String tuKhoa = Lib.takeStringInput("Nhập từ khóa cần tìm: ");
+        ArrayList<HoaDon> dshd = new ArrayList<>();
+        for (HoaDon hoaDon: hoaDonArrayList)
+        {
+            int gia;
+            try {gia = Integer.parseInt(tuKhoa);}
+            catch (NumberFormatException ignored) {gia = Integer.MIN_VALUE;}
+
+            if(
+                    hoaDon.getMahd().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    hoaDon.getMakh().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    hoaDon.getTinhTrang().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT)) ||
+                    hoaDon.getTongtien() == gia ||
+                    hoaDon.getTimexuat().toLowerCase(Locale.ROOT).contains(tuKhoa.toLowerCase(Locale.ROOT))
+            )
+            {
+                dshd.add(hoaDon);
             }
         }
-    }
-public void xoaHD(){
-       System.out.println("Xóa hóa đơn");
-        String xoa = Lib.takeStringInput("Mã hóa đơn cần xóa: ");
-        HoaDon findHD = null;
-        for (HoaDon hoaDon : hd) {
-            if(hoaDon.getMahd().equals(xoa)){
-                findHD = hoaDon;
-                break;
+
+        int count = 0;
+        System.out.println(Lib.toBlueText("Danh sách hóa đơn tìm kiếm theo từ khóa: ")  + Lib.toGreenText(tuKhoa));
+        xuatTDHD();
+        for (HoaDon hoaDon : dshd)
+        {
+            if(hoaDon.getMakh().equals(nguoi.getId()) || nguoi instanceof NhanVienBanHang)
+            {
+                hoaDon.xuatThongTin();
+                count++;
             }
-           
-       }
+        }
+
+        if(count == 0)
+            Lib.printError("Không có hóa đơn nào");
+
+    }
+
+
+    public void xoaHD(Nguoi nguoi){
+        System.out.println(Lib.toBlueText("Xóa hóa đơn"));
+        String idHoaDon = Lib.takeStringInput("Mã hóa đơn cần xóa: ");
+        HoaDon hoaDon = timKiemHoaDonTheoID(idHoaDon, nguoi);
        
-        if(findHD != null){
-            hd.remove(findHD);
-            System.out.println("Hóa đơn đã xóa khỏi danh sách");
+        if(hoaDon != null){
+            hoaDonArrayList.remove(hoaDon);
+            Lib.printMessage("Hóa đơn đã xóa khỏi danh sách");
         }else{
-            System.out.println("Hóa đơn không có trong danh sách");
+            Lib.printError("Hóa đơn không có trong danh sách");
         }
    }
-public void xuatHD(){
-        System.out.println("Danh sách hóa đơn");
-        for (HoaDon hoaDon : hd) {
-            String tinhTrang;
-            if(hoaDon.getTinhTrang().equals("Đang chờ xác nhận"))
-                tinhTrang = Lib.TEXT_BLUE + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-            else if(hoaDon.getTinhTrang().equals("Đã xác nhận"))
-                tinhTrang = Lib.TEXT_GREEN + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-            else
-                tinhTrang = Lib.TEXT_RED + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-            System.out.println("Tình trạng hóa đơn: " + tinhTrang);
-            System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-            System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", "Mã hóa đơn" , "Mã nhân viên","Mã khách hàng","Thời gian","Tổng tiền");
-            System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20) , Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-            System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", hoaDon.getMahd() , hoaDon.getManv(),hoaDon.getMakh(),hoaDon.getTimexuat(),hoaDon.getTongtien());
-            hoaDon.getDsCTHD().XuatCTHD();
-            System.out.println();
-        }
-       
-    }
 
-    public void xuatHDCuaKhachHang(Nguoi nguoi){
-        System.out.println("Danh sách hóa đơn");
-        for (HoaDon hoaDon : hd) {
-            if(hoaDon.getMakh().equals(nguoi.getId()))
+   private void xuatTDHD()
+   {
+       System.out.printf("+%-20s+%-20s+%-20s+%-10s+%-15s+%-25s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 10), Lib.repeatStr("-", 15), Lib.repeatStr("-", 25));
+       System.out.printf("|%-20s|%-20s|%-20s|%-10s|%-15s|%-25s| \n", "Mã hóa đơn" , "Mã nhân viên","Mã khách hàng","Thời gian","Tổng tiền", "Tình trạng");
+       System.out.printf("+%-20s+%-20s+%-20s+%-10s+%-15s+%-25s+ \n", Lib.repeatStr("-", 20) , Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 10), Lib.repeatStr("-", 15), Lib.repeatStr("-", 25));
+   }
+
+   private void xuatChiTietHoaDon(HoaDon hoaDon)
+   {
+       xuatTDHD();
+       hoaDon.xuatThongTin();
+       System.out.printf("+%-20s+%-20s+%-20s+%-10s+%-15s+%-25s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 10), Lib.repeatStr("-", 15), Lib.repeatStr("-", 25));
+       hoaDon.getDsCTHD().XuatCTHD();
+       System.out.printf("+%-20s+%-20s+%-20s+%-10s+%-15s+%-25s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 10), Lib.repeatStr("-", 15), Lib.repeatStr("-", 25));
+   }
+
+   public void xuatHD(Nguoi nguoi){
+        int count = 0;
+        System.out.println(Lib.toBlueText("Danh sách hóa đơn"));
+        xuatTDHD();
+        for (HoaDon hoaDon : hoaDonArrayList)
+        {
+            if(hoaDon.getMakh().equals(nguoi.getId()) || nguoi instanceof NhanVienBanHang)
             {
-                String tinhTrang;
-                if(hoaDon.getTinhTrang().equals("Đang chờ xác nhận"))
-                    tinhTrang = Lib.TEXT_BLUE + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                else if(hoaDon.getTinhTrang().equals("Đã xác nhận"))
-                    tinhTrang = Lib.TEXT_GREEN + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                else
-                    tinhTrang = Lib.TEXT_RED + hoaDon.getTinhTrang() + Lib.TEXT_RESET;
-                System.out.println("Tình trạng hóa đơn: " + tinhTrang);
-                System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-                System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", "Mã hóa đơn" , "Mã nhân viên","Mã khách hàng","Thời gian","Tổng tiền");
-                System.out.printf("+%-20s+%-20s+%-20s+%-35s+%-20s+ \n", Lib.repeatStr("-", 20) , Lib.repeatStr("-", 20), Lib.repeatStr("-", 20), Lib.repeatStr("-", 35), Lib.repeatStr("-", 20));
-                System.out.printf("|%-20s|%-20s|%-20s|%-35s|%-20s| \n", hoaDon.getMahd() , hoaDon.getManv(),hoaDon.getMakh(),hoaDon.getTimexuat(),hoaDon.getTongtien());
-                hoaDon.getDsCTHD().XuatCTHD();
-                System.out.println();
+                hoaDon.xuatThongTin();
+                count++;
             }
         }
 
+        if(count == 0)
+            Lib.printError("Không có hóa đơn nào");
+    }
+
+
+    private void xemChiTietHoaDon(Nguoi nguoi)
+    {
+        String id = Lib.takeStringInput("Nhập mã hóa đơn cần xem: ");
+        HoaDon hoaDon = timKiemHoaDonTheoID(id, nguoi);
+        if (hoaDon == null)
+            Lib.printError("Không có hóa đơn này");
+        else
+            xuatChiTietHoaDon(hoaDon);
+    }
+
+    private void thayDoiTinhTrangHoaDon(Nguoi nguoi)
+    {
+        if(nguoi instanceof NhanVienBanHang)
+        {
+            String id = Lib.takeStringInput("Nhập mã hóa đơn cần xác nhận: ");
+            HoaDon hoaDon = hoaDonArrayList.stream().filter(x -> x.getMahd().equals(id)).findAny().orElse(null);
+            if (hoaDon == null)
+                Lib.printError("Không tìm thấy");
+            else {
+                hoaDon.setManv(nguoi.getId());
+                hoaDon.setTinhTrang("Đã xác nhận");
+            }
+        }
+        else
+        {
+            String id = Lib.takeStringInput("Nhập mã hóa đơn cần hủy: ");
+            HoaDon hoaDon = hoaDonArrayList.stream().filter(x -> x.getMahd().equals(id)).findAny().orElse(null);
+            if (hoaDon == null)
+                Lib.printError("Không tìm thấy");
+            else
+                hoaDon.setTinhTrang("Yêu cầu hủy");
+        }
     }
 
     public void menuHD(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
         boolean out = false;
-        do{
-            System.out.println("MENU HÓA ĐƠN");
-            System.out.println("1. Xuất danh sách hóa đơn");
-            System.out.println("2. Thêm hóa đơn");
-            System.out.println("3. Sửa thông tin hóa đơn");
-            System.out.println("4. Tìm hóa đơn");
-            System.out.println("5. Xóa hóa đơn");
-            System.out.println("6. Xác nhận hóa đơn");
-            System.out.println("7. Thoát menu");
-            System.out.print("Lựa chọn: ");
-            switch(Lib.takeInputChoice(1, 7)){
-                case 1:
-                    xuatHD();
-                    break;
-                case 2:
-                    themHD(danhSachDT, nguoi, shop);
-                    break;
-                case 3:
-                    suaHD(danhSachDT, nguoi, shop);
-                    break;
-                case 4:
-                    timHD();
-                    break;
-                case 5:
-                    xoaHD();
-                    break;
-                case 6:
-                    String id = Lib.takeStringInput("Nhập mã hóa đơn cần xác nhận: ");
-                    HoaDon hoaDon = hd.stream().filter(x -> x.getMahd().equals(id)).findAny().orElse(null);
-                    if(hoaDon == null)
-                        Lib.printError("Không tìm thấy");
-                    else
-                    {
-                        hoaDon.setManv(nguoi.getId());
-                        hoaDon.setTinhTrang("Đã xác nhận");
-                    }
+        //Menu của nhân viên bán hàng
+        if(nguoi instanceof NhanVienBanHang)
+        {
+            do{
+                xuatHD(nguoi);
+                System.out.println(Lib.toBlueText("MENU HÓA ĐƠN"));
+                System.out.println("1. Xem chi tiết hóa đơn");
+                System.out.println("2. Sửa thông tin hóa đơn");
+                System.out.println("3. Tìm kiếm");
+                System.out.println("4. Xóa hóa đơn");
+                System.out.println("5. Xác nhận hóa đơn");
+                System.out.println("0. Thoát menu");
+                switch (Lib.takeInputChoice(0, 5)) {
+                    case 1 -> xemChiTietHoaDon(nguoi);
+                    case 2 -> suaHD(danhSachDT, nguoi, shop);
+                    case 3 -> timHD(nguoi);
+                    case 4 -> xoaHD(nguoi);
+                    case 5 -> thayDoiTinhTrangHoaDon(nguoi);
+                    case 0 -> out = true;
+                }
+                if(!out)
+                    Lib.clearScreen();
+            }while(!out);
+        }
+        else //Menu của khách hàng
+        {
+            do{
+                xuatHD(nguoi);
+                System.out.println(Lib.toBlueText("MENU HÓA ĐƠN"));
+                System.out.println("1. Xem chi tiết hóa đơn");
+                System.out.println("2. Mua điện thoại");
+                System.out.println("3. Tìm kiếm");
+                System.out.println("4. Yêu cầu hủy hóa đơn");
+                System.out.println("0. Thoát menu");
+                switch (Lib.takeInputChoice(0, 4)) {
+                    case 1 -> xemChiTietHoaDon(nguoi);
+                    case 2 -> themHDCuaKhachHang(danhSachDT, nguoi, shop);
+                    case 3 -> timHD(nguoi);
+                    case 4 -> thayDoiTinhTrangHoaDon(nguoi);
+                    case 0 -> out = true;
+                }
+                if(!out)
+                    Lib.clearScreen();
+            }while(!out);
+        }
 
-                    break;
-                case 7:
-                    out = true;
-                    break;
-                default:
-                    System.out.println("Giá trị lựa chọn không đúng");
-            }
-        }while(!out);
     }
 
-    public void menuHDCuaKhachHang(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
-        boolean out = false;
-        do{
-            System.out.println("MENU HÓA ĐƠN");
-            System.out.println("1. Xuất danh sách hóa đơn");
-            System.out.println("2. Thêm hóa đơn");
-            System.out.println("3. Tìm hóa đơn");
-            System.out.println("4. Yêu cầu hủy hóa đơn");
-            System.out.println("5. Thoát menu");
-            System.out.print("Lựa chọn: ");
-            switch(Lib.takeInputChoice(1, 5)){
-                case 1:
-                    xuatHDCuaKhachHang(nguoi);
-                    break;
-                case 2:
-                    themHDCuaKhachHang(danhSachDT, nguoi, shop);
-                    break;
-                case 3:
-                    timHDCuaKhachHang(nguoi);
-                    break;
-                case 4:
-                    String id = Lib.takeStringInput("Nhập mã hóa đơn cần hủy: ");
-                    HoaDon hoaDon = hd.stream().filter(x -> x.getMahd().equals(id)).findAny().orElse(null);
-                    if(hoaDon == null)
-                        Lib.printError("Không tìm thấy");
-                    else
-                        hoaDon.setTinhTrang("Yêu cầu hủy");
-                    break;
-                case 5:
-                    out = true;
-                    break;
-            }
-        }while(!out);
-    }
 }

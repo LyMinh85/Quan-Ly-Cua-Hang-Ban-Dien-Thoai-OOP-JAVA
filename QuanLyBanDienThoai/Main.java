@@ -8,10 +8,10 @@ public class Main {
         boolean exit = false;
 
         //Load nguoi----------
-        Shop shop = Shop.getInstance();
+        Shop shop = new Shop();
         shop = (Shop) Lib.load(shop, "dbNguoi");
         if(shop == null)
-            shop = Shop.getInstance();
+            shop = new Shop();
 
         //Load dt-------------
         DanhSachDT danhSachDT = new DanhSachDT();
@@ -148,7 +148,7 @@ public class Main {
                             System.out.println("0. Thoát");
                             switch (Lib.takeInputChoice(0, 1))
                             {
-                                case 1 -> {DSHD.menuHDCuaKhachHang(danhSachDT, nguoi, shop); Lib.save(DSHD, "dbHoaDon");}
+                                case 1 -> {DSHD.menuHD(danhSachDT, nguoi, shop); Lib.save(DSHD, "dbHoaDon");}
                                 case 0 -> {logout = true;}
                             }
                             if(!logout)
