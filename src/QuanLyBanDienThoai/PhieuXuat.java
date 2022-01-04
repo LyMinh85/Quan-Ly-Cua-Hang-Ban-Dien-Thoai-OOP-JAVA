@@ -16,7 +16,7 @@ public class PhieuXuat extends Phieu implements Serializable {
     public void inPhieu(){
         System.out.printf("│%-8s│%-8s│%-12s│%-16s", IDPhieu, IDHoaDon, date, sumMoney);
         String colorTinhTrang = tinhTrang;
-        if(tinhTrang.equals("Đã xác nhận"))
+        if(tinhTrang.equals("Chờ xuất kho"))
             colorTinhTrang = Lib.toYellowText(tinhTrang);
         else
             colorTinhTrang = Lib.toGreenText(tinhTrang);

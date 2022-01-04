@@ -5,18 +5,18 @@ import java.util.Arrays;
 import java.util.Locale;
 
 
-public class DanhSachDT implements Serializable {
+public class DanhSachDT implements Serializable, DanhSach {
 
 	protected DienThoai[] listDT;
 	private int count = 0;
 
 	public DanhSachDT() {
 		listDT = new DienThoai[5];
-		listDT[0] = new Apple(getMaDT(), "Iphone X", "NSX001", "Pink", 15200, "10", "Meow", 200);
-		listDT[1] = new Samsung(getMaDT(), "SamSung Galaxy", "NSX002", "Blue", 12500, "10", "Fish", 150);
-		listDT[2] = new Oppo(getMaDT(), "Oppo A95", "NSX003", "Red", 9640, "10", "Fish", 120);
-		listDT[3] = new Nokia(getMaDT(), "Nokia G10", "NSX004", "Black", 7840, "10", "Meow", 80);
-		listDT[4] = new Apple(getMaDT(), "Iphone Xs Max", "NSX001", "Purple", 21000, "11", "Meow", 100);
+		listDT[0] = new Apple(getID(), "Iphone X", "NSX001", "Pink", 15200, "10", "Meow", 200);
+		listDT[1] = new Samsung(getID(), "SamSung Galaxy", "NSX002", "Blue", 12500, "10", "Fish", 150);
+		listDT[2] = new Oppo(getID(), "Oppo A95", "NSX003", "Red", 9640, "10", "Fish", 120);
+		listDT[3] = new Nokia(getID(), "Nokia G10", "NSX004", "Black", 7840, "10", "Meow", 80);
+		listDT[4] = new Apple(getID(), "Iphone Xs Max", "NSX001", "Purple", 21000, "11", "Meow", 100);
 	}
 	
 	public void setDienThoai(DienThoai[]dt) {
@@ -31,7 +31,8 @@ public class DanhSachDT implements Serializable {
 	public int getsoLuong() {
 		return listDT.length;
 	}
-	private String getMaDT()
+
+	public String getID()
 	{
 		count++;
 		Integer a = count;
@@ -63,7 +64,7 @@ public class DanhSachDT implements Serializable {
 				Lib.repeatStr("─", 15));
 	}
 
-	public void xuat() {
+	public void xuatDS() {
 		if (getsoLuong() <= 0) {
 			Lib.printError("Không có Điện Thoại nào trong danh sách! ");
 			return;
@@ -78,7 +79,7 @@ public class DanhSachDT implements Serializable {
 	{
 		boolean check;
 		String mansx;
-		danhSachNSX.xuat();
+		danhSachNSX.xuatDS();
 		do {
 			check = false;
 			mansx = Lib.takeStringInput("Nhập mã nhà sản xuất: ");
@@ -89,7 +90,7 @@ public class DanhSachDT implements Serializable {
 	}
 	
 	public void themDT(DanhSachNSX danhSachNSX, DanhSachNhaCungCap dsncc) {
-		String madt = getMaDT();
+		String madt = getID();
 		String mansx = nhapMaNSX(danhSachNSX);
 		if(mansx.equals("stop"))
 			return;
@@ -229,7 +230,7 @@ public class DanhSachDT implements Serializable {
 	public void menu(DanhSachNSX danhSachNSX, DanhSachNhaCungCap dsncc)
 	{
 		while(true) {
-			xuat();
+			xuatDS();
 			System.out.println("1. Thêm điện thoại");
 			System.out.println("2. Tìm kiếm trong bảng");
 			System.out.println("3. Xóa Điện Thoại");

@@ -2,16 +2,15 @@ package QuanLyBanDienThoai;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
-public class DSPhieuXuat implements Serializable{
+public class DSPhieuXuat implements Serializable, DanhSach{
     private ArrayList<PhieuXuat> dsPhieuXuat;
     private int count = 0;
 
     public DSPhieuXuat(Nguoi nguoi, DanhSachHoaDon danhSachHoaDon)
     {
         dsPhieuXuat = new ArrayList<>();
+        int count = 0;
         for (HoaDon hoaDon : danhSachHoaDon.getHoaDonArrayList())
         {
             if(hoaDon.getTinhTrang().equals("Đã xác nhận"))
@@ -23,16 +22,37 @@ public class DSPhieuXuat implements Serializable{
                     ChiTietPhieu obj = new ChiTietPhieu(cthd.getMadienthoai(), cthd.getSluong(), cthd.getGia());
                     dsctp.add(obj);
                 }
-                PhieuXuat phieuXuat = new PhieuXuat(getID(), hoaDon.getTimexuat(), hoaDon.getManv(),
-                        nguoi.getId(), dsctp, dsctp.tinhTongTien(), hoaDon.getMahd());
-                dsPhieuXuat.add(phieuXuat);
-                phieuXuat.xuatHang(nguoi, danhSachHoaDon);
+                if(count <= 4)
+                {
+                    PhieuXuat phieuXuat = new PhieuXuat(getID(), hoaDon.getTimexuat(), hoaDon.getManv(),
+                            nguoi.getId(), dsctp, dsctp.tinhTongTien(), hoaDon.getMahd());
+                    dsPhieuXuat.add(phieuXuat);
+                    phieuXuat.xuatHang(nguoi, danhSachHoaDon);
+                }
+                else if(count == 5)
+                {
+                    PhieuXuat phieuXuat = new PhieuXuat(getID(), hoaDon.getTimexuat(), hoaDon.getManv(),
+                            nguoi.getId(), dsctp, dsctp.tinhTongTien(), hoaDon.getMahd());
+                    dsPhieuXuat.add(phieuXuat);
+                }
+                count++;
             }
         }
 
+        count = 0;
         for (HoaDon hoaDon : danhSachHoaDon.getHoaDonArrayList())
-            if(hoaDon.getTinhTrang().equals("Đã xuất kho"))
-                hoaDon.setTinhTrang("Đã nhận hàng");
+        {
+            if(count <= 3)
+            {
+                if(hoaDon.getTinhTrang().equals("Đã xuất kho"))
+                {
+                    hoaDon.setTinhTrang("Đã nhận hàng");
+                }
+            }
+            count++;
+        }
+
+
    }
 
     public String getID() {
@@ -46,7 +66,7 @@ public class DSPhieuXuat implements Serializable{
     }
 
     //┘ └ ┌ ┐ ├ ┤ ┴ ┬ ┼ │ ─
-    public void xuatTuaDePhieu() {
+    public void xuatTieuDe() {
         System.out.println(Lib.toBlueText("Danh sách phiếu xuất"));
         System.out.printf("┌%-8s┬%-8s┬%-12s┬%-16s┬%-25s┬%-25s┬%-16s┐\n", Lib.repeatStr("─", 8),
                 Lib.repeatStr("─", 8), Lib.repeatStr("─", 12),
@@ -60,7 +80,7 @@ public class DSPhieuXuat implements Serializable{
                 Lib.repeatStr("─", 25), Lib.repeatStr("─", 16));
     }
 
-    public void xemDSPhieu() {
+    public void xuatDS() {
         if (!dsPhieuXuat.isEmpty()) {
             for (PhieuXuat phieuXuat : dsPhieuXuat) {
                 phieuXuat.inPhieu();
@@ -116,7 +136,7 @@ public class DSPhieuXuat implements Serializable{
             Lib.printError("Không tìm thấy");
         else
         {
-            xuatTuaDePhieu();
+            xuatTieuDe();
             for(PhieuXuat phieuXuat : filter)
                 phieuXuat.inPhieu();
         }
@@ -169,8 +189,8 @@ public class DSPhieuXuat implements Serializable{
         boolean thoatXemDSPhieu = false;
         while(true)
         {
-            xuatTuaDePhieu();
-            xemDSPhieu();
+            xuatTieuDe();
+            xuatDS();
             System.out.println(Lib.toBlueText("Menu phiếu xuất"));
             System.out.println("1. Xem chi tiết phiếu xuất");
             System.out.println("2. Xóa phiếu xuất");

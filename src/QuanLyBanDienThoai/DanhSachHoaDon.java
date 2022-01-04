@@ -13,7 +13,7 @@ import java.util.Locale;
  *
  * @author User
  */
-public class DanhSachHoaDon implements Serializable {
+public class DanhSachHoaDon implements Serializable, DanhSach {
     private ArrayList<HoaDon> hoaDonArrayList = new ArrayList<>();
     private int count = 0;
 
@@ -23,42 +23,56 @@ public class DanhSachHoaDon implements Serializable {
         DienThoai dt1 = danhSachDT.getListDT()[0];
         DienThoai dt2 = danhSachDT.getListDT()[1];
         DienThoai dt3 = danhSachDT.getListDT()[2];
+        DienThoai dt4 = danhSachDT.getListDT()[3];
         a.getCthd().add(new ChiTietHoaDon(dt1.getmaDienThoai(), 10, dt1.getgiathanh()));
         a.getCthd().add(new ChiTietHoaDon(dt2.getmaDienThoai(), 3, dt2.getgiathanh()));
         a.getCthd().add(new ChiTietHoaDon(dt3.getmaDienThoai(), 6, dt3.getgiathanh()));
         dt1.mua(10);
         dt2.mua(3);
         dt3.mua(6);
-        hoaDonArrayList.add(new HoaDon(getMaHoaDon(), "nam", "minh", "12/12/2020", a.tinhTongTien(),  a, "Đã xác nhận"));
+        hoaDonArrayList.add(new HoaDon(getID(), "nam", "minh", "12/12/2020", a.tinhTongTien(),  a, "Đã xác nhận"));
 
         DanhSachChiTietHoaDon b = new DanhSachChiTietHoaDon();
         b.getCthd().add(new ChiTietHoaDon(dt2.getmaDienThoai(), 6, dt2.getgiathanh()));
         b.getCthd().add(new ChiTietHoaDon(dt3.getmaDienThoai(), 4, dt3.getgiathanh()));
         dt2.mua(6);
         dt3.mua(4);
-        hoaDonArrayList.add(new HoaDon(getMaHoaDon(), "nam", "minh", "1/2/2021", b.tinhTongTien(),  b, "Đã xác nhận"));
+        hoaDonArrayList.add(new HoaDon(getID(), "nam", "minh", "1/2/2021", b.tinhTongTien(),  b, "Đã xác nhận"));
 
         DanhSachChiTietHoaDon c = new DanhSachChiTietHoaDon();
         c.getCthd().add(new ChiTietHoaDon(dt1.getmaDienThoai(), 22, dt1.getgiathanh()));
         c.getCthd().add(new ChiTietHoaDon(dt3.getmaDienThoai(), 40, dt3.getgiathanh()));
         dt1.mua(22);
         dt3.mua(40);
-        hoaDonArrayList.add(new HoaDon(getMaHoaDon(), "nam", "sinh", "11/2/2021", c.tinhTongTien(),  c, "Đã xác nhận"));
+        hoaDonArrayList.add(new HoaDon(getID(), "nam", "sinh", "11/2/2021", c.tinhTongTien(),  c, "Đã xác nhận"));
 
         DanhSachChiTietHoaDon d = new DanhSachChiTietHoaDon();
         d.getCthd().add(new ChiTietHoaDon(dt1.getmaDienThoai(), 55, dt1.getgiathanh()));
         d.getCthd().add(new ChiTietHoaDon(dt3.getmaDienThoai(), 11, dt3.getgiathanh()));
         dt1.mua(55);
         dt3.mua(11);
-        hoaDonArrayList.add(new HoaDon(getMaHoaDon(), "nam", "sinh", "26/5/2021", d.tinhTongTien(),  d, "Đã xác nhận"));
+        hoaDonArrayList.add(new HoaDon(getID(), "nam", "sinh", "26/5/2021", d.tinhTongTien(),  d, "Đã xác nhận"));
 
         DanhSachChiTietHoaDon e = new DanhSachChiTietHoaDon();
         e.getCthd().add(new ChiTietHoaDon(dt1.getmaDienThoai(), 33, dt1.getgiathanh()));
         e.getCthd().add(new ChiTietHoaDon(dt2.getmaDienThoai(), 61, dt2.getgiathanh()));
         dt1.mua(33);
         dt2.mua(61);
-        hoaDonArrayList.add(new HoaDon(getMaHoaDon(), "", "minh", "30/7/2021", e.tinhTongTien(),  e, "Đang chờ xác nhận"));
+        hoaDonArrayList.add(new HoaDon(getID(), "nam", "minh", "30/7/2021", e.tinhTongTien(),  e, "Đã xác nhận"));
 
+        DanhSachChiTietHoaDon f = new DanhSachChiTietHoaDon();
+        f.getCthd().add(new ChiTietHoaDon(dt1.getmaDienThoai(), 11, dt3.getgiathanh()));
+        f.getCthd().add(new ChiTietHoaDon(dt2.getmaDienThoai(), 22, dt4.getgiathanh()));
+        dt3.mua(11);
+        dt4.mua(22);
+        hoaDonArrayList.add(new HoaDon(getID(), "nam", "minh", "29/8/2021", f.tinhTongTien(),  f, "Đã xác nhận"));
+
+        DanhSachChiTietHoaDon g = new DanhSachChiTietHoaDon();
+        g.getCthd().add(new ChiTietHoaDon(dt1.getmaDienThoai(), 5, dt2.getgiathanh()));
+        g.getCthd().add(new ChiTietHoaDon(dt2.getmaDienThoai(), 7, dt4.getgiathanh()));
+        dt2.mua(5);
+        dt4.mua(7);
+        hoaDonArrayList.add(new HoaDon(getID(), "", "minh", "28/12/2021", g.tinhTongTien(),  g, "Đang chờ xác nhận"));
     }
 
     private HoaDon timKiemHoaDonTheoID(String id, Nguoi nguoi)
@@ -69,7 +83,7 @@ public class DanhSachHoaDon implements Serializable {
             return hoaDonArrayList.stream().filter(x -> x.getMahd().equals(id) && x.getMakh().equals(nguoi.getId())).findAny().orElse(null);
     }
 
-    private String getMaHoaDon()
+    public String getID()
     {
         count++;
         Integer a = count;
@@ -82,7 +96,7 @@ public class DanhSachHoaDon implements Serializable {
 
     public void themHDCuaKhachHang(DanhSachDT danhSachDT, Nguoi nguoi, Shop shop){
         System.out.println(Lib.toBlueText("Mua điện thoại"));
-        String mahd = getMaHoaDon();
+        String mahd = getID();
         String manv = "";
         String makh = nguoi.getId();
 
@@ -169,7 +183,7 @@ public class DanhSachHoaDon implements Serializable {
             Lib.printError("Không có hóa đơn nào");
         else
         {
-            xuatTDHD();
+            xuatTieuDe();
             for (HoaDon hoaDon : filter)
                     hoaDon.xuatThongTin();
         }
@@ -191,7 +205,7 @@ public class DanhSachHoaDon implements Serializable {
    }
     //┘ └ ┌ ┐ ├ ┤ ┴ ┬ ┼ │ ─
 
-    private void xuatTDHD()
+    public void xuatTieuDe()
     {
        System.out.printf("┌%-20s┬%-20s┬%-20s┬%-10s┬%-15s┬%-25s┐ \n", Lib.repeatStr("─", 20), Lib.repeatStr("─", 20), Lib.repeatStr("─", 20), Lib.repeatStr("─", 10), Lib.repeatStr("─", 15), Lib.repeatStr("─", 25));
        System.out.printf("|%-20s│%-20s│%-20s│%-10s│%-15s│%-25s| \n", "Mã hóa đơn" , "Mã nhân viên","Mã khách hàng","Thời gian","Tổng tiền", "Tình trạng");
@@ -200,17 +214,19 @@ public class DanhSachHoaDon implements Serializable {
 
     private void xuatChiTietHoaDon(HoaDon hoaDon)
     {
-       xuatTDHD();
+       xuatTieuDe();
        hoaDon.xuatThongTin();
        System.out.printf("├%-20s┴%-20s┴%-20s┴%-10s┴%-15s┴%-25s┤ \n", Lib.repeatStr("─", 20), Lib.repeatStr("─", 20), Lib.repeatStr("─", 20), Lib.repeatStr("─", 10), Lib.repeatStr("─", 15), Lib.repeatStr("─", 25));
        hoaDon.getDsCTHD().XuatCTHD();
        System.out.printf("└%-20s┴%-20s┴%-20s┴%-10s─%-15s┴%-25s┘ \n", Lib.repeatStr("─", 20), Lib.repeatStr("─", 20), Lib.repeatStr("─", 20), Lib.repeatStr("─", 10), Lib.repeatStr("─", 15), Lib.repeatStr("─", 25));
    }
 
+   public void xuatDS() {}
+
     public void xuatHD(Nguoi nguoi){
         int count = 0;
         System.out.println(Lib.toBlueText("Danh sách hóa đơn"));
-        xuatTDHD();
+        xuatTieuDe();
         for (HoaDon hoaDon : hoaDonArrayList)
         {
             if(hoaDon.getMakh().equals(nguoi.getId()) || nguoi instanceof NhanVienBanHang)
@@ -270,7 +286,7 @@ public class DanhSachHoaDon implements Serializable {
     {
         String makh = Lib.takeStringInput("Nhập mã khách hàng: ");
         int tongDoanhThu = 0;
-        xuatTDHD();
+        xuatTieuDe();
         for(HoaDon hoaDon : hoaDonArrayList)
         {
             if(hoaDon.getMakh().contains(makh) && hoaDon.getTinhTrang().equals("Đã nhận hàng"))
@@ -286,7 +302,7 @@ public class DanhSachHoaDon implements Serializable {
     {
         String manv = Lib.takeStringInput("Nhập mã nhân viên: ");
         int tongDoanhThu = 0;
-        xuatTDHD();
+        xuatTieuDe();
         for(HoaDon hoaDon : hoaDonArrayList)
         {
             if(hoaDon.getManv().contains(manv) && hoaDon.getTinhTrang().equals("Đã nhận hàng"))
@@ -303,7 +319,7 @@ public class DanhSachHoaDon implements Serializable {
         String from = Lib.takeDateInput("Từ ngày: ");
         String to = Lib.takeDateInput("Đến ngày: ");
         int tongDoanhThu = 0;
-        xuatTDHD();
+        xuatTieuDe();
         for(HoaDon hoaDon : hoaDonArrayList)
         {
             if(hoaDon.getTinhTrang().equals("Đã nhận hàng") && Lib.kiemTraKhoangThoiGian(from, hoaDon.getTimexuat(), to))
@@ -320,7 +336,7 @@ public class DanhSachHoaDon implements Serializable {
         int from = Lib.takeIntegerInput("Hóa đơn tổng tiền từ: ");
         int to = Lib.takeIntegerInput("Hóa đơn tổng tiền đến: ");
         int tongDoanhThu = 0;
-        xuatTDHD();
+        xuatTieuDe();
         for(HoaDon hoaDon : hoaDonArrayList)
         {
             if(hoaDon.getTinhTrang().equals("Đã nhận hàng") && hoaDon.getTongtien() >= from && hoaDon.getTongtien() <= to)
@@ -337,7 +353,7 @@ public class DanhSachHoaDon implements Serializable {
         boolean out = false;
         int tongDoanhThu = 0;
         do {
-            xuatTDHD();
+            xuatTieuDe();
             for(HoaDon hoaDon : hoaDonArrayList)
             {
                 if(hoaDon.getTinhTrang().equals("Đã nhận hàng"))

@@ -4,19 +4,19 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class DanhSachNSX implements Serializable {
+public class DanhSachNSX implements Serializable, DanhSach {
 	protected NhaSX[] nsxArray;
 	private int count = 0;
 
 	public DanhSachNSX() {
 		nsxArray = new NhaSX[4];
-		nsxArray[0] = new NhaSX(getMaNhaSanXuat(), "Apple", "58495", "ABC", "Apple@email");
-		nsxArray[1] = new NhaSX(getMaNhaSanXuat(), "SamSung", "234", "EFG", "SamSung@email");
-		nsxArray[2] = new NhaSX(getMaNhaSanXuat(), "Oppo", "32423", "TIYM", "Oppo@email");
-		nsxArray[3] = new NhaSX(getMaNhaSanXuat(), "Nokia", "7656", "TEMK", "Nokia@email");
+		nsxArray[0] = new NhaSX(getID(), "Apple", "58495", "ABC", "Apple@email");
+		nsxArray[1] = new NhaSX(getID(), "SamSung", "234", "EFG", "SamSung@email");
+		nsxArray[2] = new NhaSX(getID(), "Oppo", "32423", "TIYM", "Oppo@email");
+		nsxArray[3] = new NhaSX(getID(), "Nokia", "7656", "TEMK", "Nokia@email");
 	}
 
-	private String getMaNhaSanXuat() {
+	public String getID() {
 		count++;
 		Integer a = count;
 		String str = a.toString();
@@ -36,7 +36,7 @@ public class DanhSachNSX implements Serializable {
 				Lib.repeatStr("─", 20), Lib.repeatStr("─", 20));
 	}
 
-	public void xuat() {
+	public void xuatDS() {
 		if (getSoLuong() <= 0) {
 			Lib.printError("Không có NSX nào trong danh sách! ");
 			return;
@@ -50,7 +50,7 @@ public class DanhSachNSX implements Serializable {
 	public void themNSX() {
 		nsxArray = Arrays.copyOf(nsxArray, getSoLuong() + 1);
 		nsxArray[getSoLuong() - 1] = new NhaSX();
-		nsxArray[getSoLuong() - 1].nhapNSX(getMaNhaSanXuat());
+		nsxArray[getSoLuong() - 1].nhapNSX(getID());
 	}
 
 	public int timkiemNSX(String maNSX) {
@@ -117,7 +117,7 @@ public class DanhSachNSX implements Serializable {
 
 	public void menu() {
 		while (true) {
-			xuat();
+			xuatDS();
 			System.out.println("1. Xóa NSX");
 			System.out.println("2. Thêm NSX ");
 			System.out.println("3. Tìm kiếm");

@@ -3,7 +3,7 @@ package QuanLyBanDienThoai;
 import java.io.*;
 import java.util.ArrayList;
 
-public class DSPhieuNhap implements Serializable{
+public class DSPhieuNhap implements Serializable, DanhSach{
     private ArrayList<PhieuNhap> dsPhieuNhap;
     private int count = 0;
 
@@ -34,7 +34,7 @@ public class DSPhieuNhap implements Serializable{
     }
 
     //┘ └ ┌ ┐ ├ ┤ ┴ ┬ ┼ │ ─
-    public void xuatTuaDePhieu() {
+    public void xuatTieuDe() {
         System.out.printf("┌%-16s┬%-16s┬%-16s┬%-16s┬%-16s┐\n",
                 Lib.repeatStr("─", 16), Lib.repeatStr("─", 16),
                 Lib.repeatStr("─", 16), Lib.repeatStr("─", 16),
@@ -46,7 +46,7 @@ public class DSPhieuNhap implements Serializable{
                 Lib.repeatStr("─", 16));
     }
 
-    public void xemDSPhieu() {
+    public void xuatDS() {
         if (!dsPhieuNhap.isEmpty()) {
             for (PhieuNhap phieuNhap : dsPhieuNhap) {
                 phieuNhap.inPhieu();
@@ -118,7 +118,7 @@ public class DSPhieuNhap implements Serializable{
             Lib.printError("Không tìm thấy");
         else
         {
-            xuatTuaDePhieu();
+            xuatTieuDe();
             for(PhieuNhap phieuNhap : filter)
                 phieuNhap.inPhieu();
         }
@@ -144,7 +144,7 @@ public class DSPhieuNhap implements Serializable{
         DSChiTietPhieu dsChiTietPhieu = new DSChiTietPhieu();
         boolean finish = false;
         do {
-            danhSachDT.xuat();
+            danhSachDT.xuatDS();
             System.out.println("1. Nhập điện thoại");
             System.out.println("2. Xác nhận nhập hàng");
             switch (Lib.takeInputChoice(1, 2))
@@ -185,8 +185,8 @@ public class DSPhieuNhap implements Serializable{
         boolean thoatXemDSPhieu = false;
         while(true)
         {
-            xuatTuaDePhieu();
-            xemDSPhieu();
+            xuatTieuDe();
+            xuatDS();
             System.out.println("1. Xem chi tiết phiếu nhập");
             System.out.println("2. Thêm phiếu nhập");
             System.out.println("3. Xóa phiếu nhập");

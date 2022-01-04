@@ -13,19 +13,19 @@ import java.util.Locale;
  *
  * @author User
  */
-public class DanhSachNhaCungCap implements Serializable {
+public class DanhSachNhaCungCap implements Serializable, DanhSach {
     private ArrayList<NhaCungCap> listNhaCungCap = new ArrayList<>();
     private int count = 0;
 
     //Khởi tạo các nhà cung cấp mặc định
     public DanhSachNhaCungCap()
     {
-        listNhaCungCap.add(new NhaCungCap("Meow","TPHCM","9045495", "Meow@email", getMaNCC()));
-        listNhaCungCap.add(new NhaCungCap("Fish","Hà nội","549844", "Fish@email", getMaNCC()));
+        listNhaCungCap.add(new NhaCungCap("Meow","TPHCM","9045495", "Meow@email", getID()));
+        listNhaCungCap.add(new NhaCungCap("Fish","Hà nội","549844", "Fish@email", getID()));
     }
 
     //Lấy mã nhà cung cấp tiếp theo
-    private String getMaNCC()
+    public String getID()
     {
         count++;
         Integer a = count;
@@ -43,7 +43,7 @@ public class DanhSachNhaCungCap implements Serializable {
         String diachi = Lib.takeStringInput("Địa chỉ: ");
         String sdt = Lib.takeStringInput("Số diện thoại liên lạc: ");
         String email = Lib.takeStringInput("Email: ");
-        String macc = getMaNCC();
+        String macc = getID();
 
         listNhaCungCap.add(new NhaCungCap(tencc,diachi,sdt,email,macc));
     }

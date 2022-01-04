@@ -88,36 +88,25 @@ public class Main {
                     //Người quản lý (admin)
                     else if(nguoi instanceof QuanLy)
                     {
-
                         while(true)
                         {
                             System.out.printf("+%-30s%-5s%-25s+\n", Lib.repeatStr("-", 30), "Admin", Lib.repeatStr("-", 25));
                             System.out.printf("%-20s%-15s%-25s\n", Lib.repeatStr(" ", 20), Lib.toBlueText("Xin chào " + nguoi.getHoTen()), Lib.repeatStr(" ", 25));
                             System.out.println("1. Xem danh sách nhân viên");
-                            System.out.println("2. Xem danh sách khách hàng");
-                            System.out.println("3. Xem danh sách điện thoại");
-                            System.out.println("4. Xem danh sách nhà sản xuất");
-                            System.out.println("5. Xem danh sách nhà cung cấp");
+                            System.out.println("2. Xem danh sách nhà sản xuất");
+                            System.out.println("3. Xem danh sách nhà cung cấp");
                             System.out.println("0. Đăng xuất");
-                            switch (Lib.takeInputChoice(0,5))
+                            switch (Lib.takeInputChoice(0,3))
                             {
                                 case 1 -> {
                                     shop.menuDanhSachNhanVien();
                                     Lib.save(shop, "dbNguoi");
                                 }
                                 case 2 -> {
-                                    shop.menuDanhSachKhachHang();
-                                    Lib.save(shop, "dbNguoi");
-                                }
-                                case 3 -> {
-                                    danhSachDT.menu(danhSachNSX, dsncc);
-                                    Lib.save(danhSachDT, "dbDienThoai");
-                                }
-                                case 4 -> {
                                     danhSachNSX.menu();
                                     Lib.save(danhSachNSX, "dbNSX");
                                 }
-                                case 5 -> {
+                                case 3 -> {
                                     dsncc.menuNhacc();
                                     Lib.save(dsncc, "dbNhaCungCap");
                                 }
@@ -125,7 +114,6 @@ public class Main {
                             }
                             if(logout)
                                 break;
-
                             Lib.clearScreen();
                         }
                     }
@@ -139,8 +127,9 @@ public class Main {
                                 System.out.printf("%-20s%-15s%-25s\n", Lib.repeatStr(" ", 20), Lib.toBlueText("Xin chào " + nguoi.getHoTen()), Lib.repeatStr(" ", 25));
                                 System.out.println("1. Xem các phiếu xuất");
                                 System.out.println("2. Xem các phiếu nhập");
+                                System.out.println("3. Xem danh sách điện thoại");
                                 System.out.println("0. Đăng xuất");
-                                switch (Lib.takeInputChoice(0, 2)){
+                                switch (Lib.takeInputChoice(0, 3)){
                                     case 1 -> {
                                         dsPhieuXuat.menu(nguoi, danhSachHoaDon);
                                         Lib.save(dsPhieuXuat, "dbPhieuXuat");
@@ -149,6 +138,10 @@ public class Main {
                                     case 2 -> {
                                         dsPhieuNhap.menu(danhSachDT, nguoi, shop, dsncc);
                                         Lib.save(dsPhieuNhap, "dbPhieuNhap");
+                                        Lib.save(danhSachDT, "dbDienThoai");
+                                    }
+                                    case 3 -> {
+                                        danhSachDT.menu(danhSachNSX, dsncc);
                                         Lib.save(danhSachDT, "dbDienThoai");
                                     }
                                     case 0 -> logout = true;
@@ -213,12 +206,14 @@ public class Main {
                     }
                     Lib.clearScreen();
                 }
+                //Đăng ký tài khoản khách hàng
                 case 2 -> {
                     System.out.printf("+%-30s%-5s%-25s+\n", Lib.repeatStr("-", 30), "Đăng ký", Lib.repeatStr("-", 25));
                     shop.taoNguoi("KhachHang");
                     Lib.printMessage("Bạn đã đăng ký xong");
                     Lib.save(shop, "dbNguoi");
                 }
+                //Thoát chương trình
                 case 0 -> {exit = true;}
             }
 

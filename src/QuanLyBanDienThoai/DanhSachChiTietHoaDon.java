@@ -35,7 +35,7 @@ public class DanhSachChiTietHoaDon implements Serializable {
 
     //Nhập chi tiết hóa đơn
     public void NhapCTHD(DanhSachDT danhSachDT){
-       danhSachDT.xuat();
+       danhSachDT.xuatDS();
        boolean stop = false;
        do{
            String madienthoai = nhapMaDienThoai(danhSachDT);
