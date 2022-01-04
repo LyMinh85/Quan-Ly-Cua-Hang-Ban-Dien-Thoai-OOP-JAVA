@@ -2,7 +2,7 @@ package QuanLyBanDienThoai;
 
 import java.io.Serializable;
 
-public class Nguoi implements Serializable {
+public abstract class Nguoi implements Serializable {
     protected String hoTen;
     protected String id;
     protected String diaChi;
@@ -23,10 +23,7 @@ public class Nguoi implements Serializable {
         this.password = password;
     }
 
-    public void xuatThongTin()
-    {
-        System.out.printf("|%-16s|%-16s|%-16s|%-10s|%-10s|%-10s|%-9s|%-16s|", id, hoTen, diaChi, SDT, ngaySinh, gioiTinh, CMND, password);
-    }
+    public abstract void xuatThongTin();
 
     public String toString()
     {

@@ -15,24 +15,29 @@ import java.io.Serializable;
 public class NhaCungCap implements Serializable {
     private String tencc;
     private String diachi;
-    private int sdt;
+    private String sdt;
     private String email;
     private String macc;
 
     public NhaCungCap() {
         this.tencc = null;
         this.diachi = null;
-        this.sdt = 0;
+        this.sdt = null;
         this.email = null;
         this.macc = null;
     }
 
-    public NhaCungCap(String tencc, String diachi, int sdt, String email, String macc) {
+    public NhaCungCap(String tencc, String diachi, String sdt, String email, String macc) {
         this.tencc = tencc;
         this.diachi = diachi;
         this.sdt = sdt;
         this.email = email;
         this.macc = macc;
+    }
+
+    public void xuatThongTin()
+    {
+        System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s| \n", macc, tencc, diachi, sdt, email);
     }
 
     public String getTencc() {
@@ -51,11 +56,11 @@ public class NhaCungCap implements Serializable {
         this.diachi = diachi;
     }
 
-    public int getSdt() {
+    public String getSdt() {
         return sdt;
     }
 
-    public void setSdt(int sdt) {
+    public void setSdt(String sdt) {
         this.sdt = sdt;
     }
 

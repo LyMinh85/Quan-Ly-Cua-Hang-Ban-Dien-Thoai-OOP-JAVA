@@ -7,13 +7,21 @@ import java.util.stream.Collectors;
 public class Shop implements Serializable{
     ArrayList<Nguoi> listNguoi;
 
-    public static Shop obj;
-
-    public static Shop getInstance() {
-        if (obj == null) {
-            obj = new Shop();
-        }
-        return obj;
+    public Shop() {
+        listNguoi = new ArrayList<>();
+        taoNguoiQuanLy();
+        Nguoi nvbh = new NhanVienBanHang(
+                "nam", "huynh ngoc nam","idk", "1234",
+                "08/08/8888", "Nam", "231512", "123", 100000);
+        Nguoi nvtk = new NhanVienThuKho(
+                "vu", "vu","idk", "4321",
+                "08/08/8888", "Nam", "4325456", "123", 100000);
+        Nguoi kh = new KhachHang(
+                "minh", "ly minh","idk", "34234",
+                "08/08/8888", "Nam", "354235", "123");
+        listNguoi.add(nvbh);
+        listNguoi.add(nvtk);
+        listNguoi.add(kh);
     }
 
     public Nguoi login() {
@@ -21,11 +29,6 @@ public class Shop implements Serializable{
         String id = Lib.takeStringInput("Nhập id: ");
         String pass = Lib.takeStringInput("Nhập password: ");
         return listNguoi.stream().filter(x -> x.id.equals(id) && x.password.equals(pass)).findAny().orElse(null);
-    }
-
-    public Shop() {
-        listNguoi = new ArrayList<>();
-        taoNguoiQuanLy();
     }
 
     private void taoNguoiQuanLy() {
@@ -105,11 +108,11 @@ public class Shop implements Serializable{
             switch (Lib.takeInputChoice(1, 2))
             {
                 case 1 -> {
-                    NhanVienThuKho nhanVienThuKho = new NhanVienThuKho(id, hoTen, diaChi, sdt, ns, gt, cmnd, pass, mucLuong);
+                    Nguoi nhanVienThuKho = new NhanVienThuKho(id, hoTen, diaChi, sdt, ns, gt, cmnd, pass, mucLuong);
                     listNguoi.add(nhanVienThuKho);
                 }
                 case 2 -> {
-                    NhanVienBanHang nhanVienBanHang = new NhanVienBanHang(id, hoTen, diaChi, sdt, ns, gt, cmnd, pass, mucLuong);
+                    Nguoi nhanVienBanHang = new NhanVienBanHang(id, hoTen, diaChi, sdt, ns, gt, cmnd, pass, mucLuong);
                     listNguoi.add(nhanVienBanHang);
                 }
             }

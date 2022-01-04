@@ -8,6 +8,13 @@ public class QuanLy extends Nguoi implements Serializable {
         super(id, hoTen, diaChi, SDT, ngaySinh, gioiTinh, CMND, password);
     }
 
+    @Override
+    public void xuatThongTin() {
+        System.out.printf("|%-16s|%-16s|%-16s|%-10s|%-10s|%-10s|%-9s|%-16s|", id, hoTen, diaChi, SDT, ngaySinh, gioiTinh, CMND, password);
+        System.out.println();
+    }
+
+
     public String toString()
     {
         return super.toString();

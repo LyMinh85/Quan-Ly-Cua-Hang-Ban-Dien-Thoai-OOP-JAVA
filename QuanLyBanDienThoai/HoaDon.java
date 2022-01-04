@@ -36,6 +36,18 @@ public class HoaDon implements Serializable {
         this.tinhTrang = tinhTrang;
     }
 
+    public void xuatThongTin()
+    {
+        String tinhTrang;
+        if(getTinhTrang().equals("Đang chờ xác nhận"))
+            tinhTrang = Lib.TEXT_BLUE + getTinhTrang() + Lib.TEXT_RESET;
+        else if(getTinhTrang().equals("Đã xác nhận"))
+            tinhTrang = Lib.TEXT_GREEN + getTinhTrang() + Lib.TEXT_RESET;
+        else
+            tinhTrang = Lib.TEXT_RED + getTinhTrang() + Lib.TEXT_RESET;
+        System.out.printf("|%-20s|%-20s|%-20s|%-10s|%-15s|%-25s \n", getMahd() , getManv(), getMakh(), getTimexuat(), getTongtien(), tinhTrang);
+    }
+
     public int getTongtien() {
         return tongtien;
     }

@@ -1,10 +1,7 @@
 package QuanLyBanDienThoai;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 //Danh sách này bắt chước theo vector trong c++
 public class DSChiTietPhieu implements Serializable {
@@ -80,7 +77,7 @@ public class DSChiTietPhieu implements Serializable {
             return null;
 
         int sl = Lib.takeIntegerInput("Nhập số lượng: ");
-        int donGia = danhSachDT.getDt()[danhSachDT.timkiemmaDienThoai(idDT)].getgiathanh();
+        int donGia = danhSachDT.getListDT()[danhSachDT.timkiemmaDienThoai(idDT)].getgiathanh();
         return new ChiTietPhieu(idDT, sl, donGia);
     }
 
